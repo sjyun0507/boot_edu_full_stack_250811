@@ -17,21 +17,13 @@ public class TodoController {
 
     @GetMapping("/{tno}")
     public TodoDTO getOne(@PathVariable("tno") Long tno){
-        TodoDTO todoDTO = todoService.get(tno);
-        return todoDTO;
+        return todoService.get(tno);
     }
 
 
     @GetMapping("/list")
-    public PageResponseDTO<TodoDTO> getList(@RequestParam(name="page", defaultValue = "1") int page,
-                                            @RequestParam(name="size", defaultValue = "10") int size) {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(page)
-                .size(size)
-                .build();
-
-        PageResponseDTO<TodoDTO> responseDTO = todoService.getList(pageRequestDTO);
-        return responseDTO;
+    public PageResponseDTO getList(PageRequestDTO pageRequestDTO) {
+        return todoService.getList(pageRequestDTO);
     }
 
 }
