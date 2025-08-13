@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Log4j2
 @RestController
 @RequestMapping("/api/todo")
@@ -16,7 +18,7 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping("/{tno}")
-    public TodoDTO getOne(@PathVariable("tno") Long tno){
+    public TodoDTO getOne(@PathVariable("tno") Long tno) {
         return todoService.get(tno);
     }
 
@@ -26,4 +28,23 @@ public class TodoController {
         return todoService.getList(pageRequestDTO);
     }
 
+    @PostMapping("/")
+    public Map<String, Long> register(@RequestBody TodoDTO todoDTO) {
+        log.info("TodoDTO:{}", todoDTO);
+        Long tno = todoService.add(todoDTO);
+        return Map.of("TNO", tno);
+    }
+
+    @PutMapping("/{tno}")
+    public Map<String, String> modify(@PathVariable Long tno, @RequestBody TodoDTO todoDTO) {
+        todoDTO.setTno(tno);
+        todoService.modify(todoDTO);
+        return Map.of("result", "success");
+    }
+
+    @DeleteMapping("/{tno}")
+    public Map<String, String> remove(@PathVariable Long tno) {
+        todoService.remove(tno);
+        return Map.of("result", "success");
+    }
 }
